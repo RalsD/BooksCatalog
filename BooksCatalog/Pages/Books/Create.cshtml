@@ -1,0 +1,91 @@
+﻿@page
+@model BooksCatalog.Pages.Books.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Book</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Book.Name" class="control-label"></label>
+                <input asp-for="Book.Name" class="form-control" id="create-name" />
+                <span asp-validation-for="Book.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Author" class="control-label"></label>
+                <input asp-for="Book.Author" class="form-control" id="create-author" />
+                <span asp-validation-for="Book.Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.RegistrationTimeStamp" class="control-label"></label>
+                <input asp-for="Book.RegistrationTimeStamp" class="form-control" id="create-reg" />
+                <span asp-validation-for="Book.RegistrationTimeStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Category" class="control-label"></label>
+                <select asp-for="Book.Category" class="form-control" id="create-category">
+                    <option value="History" selected>History</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Biography">Biography</option>
+                    <option value="Thriller">Thriller</option>
+                </select>
+                <span asp-validation-for="Book.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Book.Description" class="control-label"></label>
+                <input asp-for="Book.Description" class="form-control" id="create-description" />
+                <span asp-validation-for="Book.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input value="Create" class="btn btn-primary" id="create-btn"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="Index" class="back">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+      $(function () {
+            $('#create-btn').click(function () {
+                console.log("In Create function");
+                var book = new Object();
+                book.Id = 0;
+                book.Name = $('#create-name').val();
+                book.Author = $('#create-author').val();
+                book.RegistrationTimeStamp = $('#create-reg').val();
+                book.Category = $('#create-category').val();
+                book.Description = $('#create-description').val();
+                console.log(book);
+
+                $.ajax({
+                    url: "/api/Books/Create",
+                    type: "POST",
+                    data: JSON.stringify(book),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        var href = $('.back').attr('href');
+                        window.location.href = href;
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            });
+        });
+</script>
+
+}
